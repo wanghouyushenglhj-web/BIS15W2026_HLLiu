@@ -28,7 +28,8 @@ pi <- 3.14159
 **4. Write a code chunk that divides `pi` by 2. Use the help command `?` to learn how to use the `round` function to limit your result to 4 significant digits.**  
 ```{r}
 (pi/2)
-?(round)
+round(pi/2,digits = 4)
+?round
 ```
 
 **5. Calculate the mean for: 2, 8, 4, 6, NA, 4, 9, 9, 10, NA. Please start by making a new vector `x` that holds these values then use `mean` to perform the calculation.**  
