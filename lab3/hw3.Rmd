@@ -1,6 +1,6 @@
 ---
 title: "Homework 3"
-author: "Your Name Here"
+author: "Hangjun Liu"
 date: "`r Sys.Date()`"
 output:
   html_document: 
@@ -18,32 +18,50 @@ library("tidyverse")
 In order to answer the questions below, you will need to do a little online research.
 
 **1. Make three new vectors that show the name, height in feet, and height in meters of the five tallest mountains in the world.**
+The top 5 highest mountains in the world, all located in Asia, are Mount Everest, K2, Kangchenjunga, Lhotse, and Makalu.
+Everest-8848.86m-29031.69feets
+K2-8611m-28251.31feets
+Kanchenjunga-8586m-28169.29feets
+lhotse-8516m-27939.63feets
+Makalu-8485m-27837.93feets
+Data from(Links#https://extremeguide.pro/en/blogs-en/the-world-s-highest-mountains-top-10-stunning-peaks/)
 ```{r}
-
+mountains_names <- c("everest","k2","kanchenjunga","lhotse","makalu")
+height_meters <- c(8848.86,8611,8586,8516,8485)
+height_feets <- c(29031.69,28251.31,28169.29,27939.63,27837.93)
 ```
 
 **2. Combine these vectors into a data frame called `mountains`.**
 ```{r}
-
+tibble(mountains_names,height_feets,height_meters)
 ```
 
 **3. What is the mean height of the mountains in feet?**
 ```{r}
-
+mean(height_feets)
 ```
 
 **4. When were each of these mountains first climbed (i.e. in what year)? Make a new vector `first_climbed` and add it to the `mountains` data frame.**
 ```{r}
-
+first_climbed <- c(1953,1954,1955,1956,1955)
 ```
 
 ```{r}
+tibble(mountains_names,height_feets,height_meters,first_climbed)
 
 ```
+```{r}
+mountains <- tibble(mountains_names,height_feets,height_meters,first_climbed)
+```
+
 
 **5. How many times have each of these mountains been climbed? Make a new vector `summits` and add it to the `mountains` data frame.**
 ```{r}
-
+summits <- c(12800,800,187,900,450)
+mountains<- tibble(mountains_names,height_feets,height_meters,first_climbed,summits)
+```
+```{r}
+tibble(mountains_names,height_feets,height_meters,first_climbed,summits)
 ```
 
 **6. Which mountain has the highest number of fatalities? Make a new vector `fatalities` and add it to the `mountains` data frame.**

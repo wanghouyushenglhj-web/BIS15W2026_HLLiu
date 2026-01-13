@@ -24,7 +24,7 @@ Before we get started with R, it is important to understand the concept of worki
 
 Grey box called Code chunk
 ```{r}
-getwd()
+getwd() 
 ```
 
 making new code chunk
