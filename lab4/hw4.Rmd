@@ -76,6 +76,15 @@ summary(msleep$bodywt)
 ```
 
 **6. Build a plot that shows the range of `bodywt.` by vore type. Because the range of `bodywt` is so variable, you will need to scale the y-axis. You do this by adding `scale_y_log10()` as another layer.**
+```{r}
+names(msleep)
+```
+```{r}
+ggplot(data=msleep,
+       mapping = aes(x=vore,y=bodywt))+
+  geom_boxplot(mapping = aes(color = bodywt))+
+  scale_y_log10()
+```
 
 **7. Is there a relationship between body weight and total sleep time? Add appropriate labels and a title to your plot.**
 
