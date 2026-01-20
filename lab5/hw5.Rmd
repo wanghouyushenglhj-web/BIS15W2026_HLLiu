@@ -66,7 +66,8 @@ names(homerange)
 homerange %>%
   filter(taxon=="mammals",trophic.guild=="herbivore",mean.hra.m2>1000000) %>%  
   select(common.name,order,mean.hra.m2,mean.mass.g) %>% 
-  arrange(desc(mean.hra.m2))
+  arrange(desc(mean.hra.m2)) %>% #from this step i got top 10 and i found the homerange of number 11 and then filter to show only tope 10
+  filter(mean.hra.m2>42065883)
 ```
 
 **6. Which two species have the largest and smallest homerange sizes?**
