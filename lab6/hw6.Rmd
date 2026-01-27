@@ -49,9 +49,8 @@ gabon <- gabon%>%
 
 **4. Use `mutate()` Change the variables `HuntCat`, `LandUse`, and `TransectID` to factors. Be sure to store the output as a new dataframe and use it for the remaining questions.**
 ```{r}
-gabon_new <- gabon %>% 
-  mutate(hunt_cat,land_use,transect_id) %>% 
-  select(hunt_cat,land_use,transect_id)
+gabon %>% 
+  mutate(across(c(hunt_cat,land_use,transect_id),as.factor))
 ```
 
 ```{r}
