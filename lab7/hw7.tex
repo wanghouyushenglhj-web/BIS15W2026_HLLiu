@@ -106,7 +106,7 @@
 
 \title{Homework 7}
 \author{Your Name Here}
-\date{2026-01-27}
+\date{2026-01-29}
 
 \begin{document}
 \maketitle
@@ -368,7 +368,7 @@ sample collection. Does the sampling look even between years and sexes?}
   \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"f"}\NormalTok{,years\_of\_sample\_collection}\SpecialCharTok{==}\StringTok{"2005{-}13"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_age\_f=}\FunctionTok{mean}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
             \AttributeTok{median\_age\_f=}\FunctionTok{median}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
-            \AttributeTok{sd\_age\_f=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#meand,median,sd for age of females during year of 2005{-}13}
+            \AttributeTok{sd\_age\_f=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#mean,median,sd for age of females during year of 2005{-}13}
 \end{Highlighting}
 \end{Shaded}
 
@@ -388,7 +388,7 @@ sample collection. Does the sampling look even between years and sexes?}
   \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"f"}\NormalTok{,years\_of\_sample\_collection}\SpecialCharTok{==}\StringTok{"1966{-}68"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_age\_f=}\FunctionTok{mean}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
             \AttributeTok{median\_age\_f=}\FunctionTok{median}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
-            \AttributeTok{sd\_age\_f=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#meand,median,sd for age of females during year of 1966{-}68}
+            \AttributeTok{sd\_age\_f=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#mean,median,sd for age of females during year of 1966{-}68}
 \end{Highlighting}
 \end{Shaded}
 
@@ -405,7 +405,7 @@ sample collection. Does the sampling look even between years and sexes?}
   \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"m"}\NormalTok{,years\_of\_sample\_collection}\SpecialCharTok{==}\StringTok{"1966{-}68"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_age\_m=}\FunctionTok{mean}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
             \AttributeTok{median\_age\_m=}\FunctionTok{median}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
-            \AttributeTok{sd\_age\_m=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#meand,median,sd for age of males during year of 1966{-}68}
+            \AttributeTok{sd\_age\_m=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#mean,median,sd for age of males during year of 1966{-}68}
 \end{Highlighting}
 \end{Shaded}
 
@@ -422,7 +422,7 @@ sample collection. Does the sampling look even between years and sexes?}
   \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"m"}\NormalTok{,years\_of\_sample\_collection}\SpecialCharTok{==}\StringTok{"2005{-}13"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
   \FunctionTok{summarise}\NormalTok{(}\AttributeTok{mean\_age\_m=}\FunctionTok{mean}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
             \AttributeTok{median\_age\_m=}\FunctionTok{median}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T),}
-            \AttributeTok{sd\_age\_m=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#meand,median,sd for age of males during year of 2005{-}13}
+            \AttributeTok{sd\_age\_m=}\FunctionTok{sd}\NormalTok{(estimated\_age\_years,}\AttributeTok{na.rm=}\NormalTok{T))}\CommentTok{\#mean,median,sd for age of males during year of 2005{-}13}
 \end{Highlighting}
 \end{Shaded}
 
@@ -445,7 +445,7 @@ between these variables and add a linear model fit line.}\\
   \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping=}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{estimated\_age\_years,}\AttributeTok{y=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
   \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{mapping =}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
   \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm)}\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=}\StringTok{"Ages vs tusk\_length"}\NormalTok{)}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=}\StringTok{"Ages vs Tusk\_length"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -471,33 +471,209 @@ between these variables and add a linear model fit line.}\\
 \textbf{10. Is shoulder height (independent variable) a positive
 predictor of tusk length (dependent variable)? Create a plot that shows
 the relationship between these variables and add a linear model fit
-line.}\\
-\strut \\
-\strut \\
-\strut \\
-\strut \\
-\strut \\
+line.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(elephant)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "years_of_sample_collection" "elephant_id"               
+## [3] "sex"                        "estimated_age_years"       
+## [5] "shoulder_height_in_cm"      "tusk_length_in_cm"         
+## [7] "tusk_circumference_in_cm"
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elephant }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping=}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{shoulder\_height\_in\_cm,}\AttributeTok{y=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{mapping =}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm)}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=}\StringTok{"Shoulder height vs Tusk length"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 181 rows containing non-finite outside the scale range
+## (`stat_smooth()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 181 rows containing missing values or values outside the scale range
+## (`geom_point()`).
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{hw7_files/figure-latex/unnamed-chunk-18-1.pdf}}
+
+\hfill\break
+\hfill\break
+\hfill\break
 
 \textbf{11. The authors argue that because poachers preferentially
 target elephants with large tusks, this has resulted in a decrease in
 average tusk length. Is this supported by the data? Show your code and
 calculations below.}\\
 \strut \\
-\strut \\
-\strut \\
-\strut \\
-\strut \\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(elephant)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "years_of_sample_collection" "elephant_id"               
+## [3] "sex"                        "estimated_age_years"       
+## [5] "shoulder_height_in_cm"      "tusk_length_in_cm"         
+## [7] "tusk_circumference_in_cm"
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{elephant }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping=}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{years\_of\_sample\_collection,}\AttributeTok{y=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{mapping =}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color=}\NormalTok{years\_of\_sample\_collection))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=}\StringTok{"Tusk length before(1966{-}68) and after(2005{-}13) the poaching"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 180 rows containing non-finite outside the scale range
+## (`stat_boxplot()`).
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{hw7_files/figure-latex/unnamed-chunk-20-1.pdf}}
+
+\hfill\break
+\hfill\break
+\hfill\break
 
 \textbf{12. Male elephants reach effective sexual maturity at 25 years
 while females are sexually mature at 12 years. Make a new dataframe that
 extracts only the males and females at sexual maturity. Then, make a
 plot that shows the range of tusk length between the two sample periods
-for these mature elephants.}\\
-\strut \\
-\strut \\
-\strut \\
-\strut \\
-\strut \\
+for these mature elephants.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(elephant)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "years_of_sample_collection" "elephant_id"               
+## [3] "sex"                        "estimated_age_years"       
+## [5] "shoulder_height_in_cm"      "tusk_length_in_cm"         
+## [7] "tusk_circumference_in_cm"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature\_f }\OtherTok{\textless{}{-}}\NormalTok{ elephant }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"f"}\NormalTok{,estimated\_age\_years}\SpecialCharTok{\textgreater{}}\DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature\_m}\OtherTok{\textless{}{-}}\NormalTok{ elephant }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"m"}\NormalTok{,estimated\_age\_years}\SpecialCharTok{\textgreater{}}\DecValTok{25}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature\_f}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 242 x 7
+##    years_of_sample_collection elephant_id sex   estimated_age_years
+##    <chr>                      <chr>       <chr>               <dbl>
+##  1 1966-68                    7           f                    13  
+##  2 1966-68                    15          f                    13  
+##  3 1966-68                    164         f                    13  
+##  4 1966-68                    237         f                    13  
+##  5 1966-68                    194         f                    13.5
+##  6 1966-68                    23          f                    14  
+##  7 1966-68                    148         f                    14  
+##  8 1966-68                    204         f                    14  
+##  9 1966-68                    219         f                    14  
+## 10 1966-68                    288         f                    14  
+## # i 232 more rows
+## # i 3 more variables: shoulder_height_in_cm <dbl>, tusk_length_in_cm <dbl>,
+## #   tusk_circumference_in_cm <dbl>
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature\_m}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 44 x 7
+##    years_of_sample_collection elephant_id sex   estimated_age_years
+##    <chr>                      <chr>       <chr>               <dbl>
+##  1 1966-68                    138         m                    26  
+##  2 1966-68                    303         m                    26.5
+##  3 1966-68                    281         m                    27  
+##  4 1966-68                    115         m                    30  
+##  5 1966-68                    300         m                    30  
+##  6 1966-68                    301         m                    30  
+##  7 1966-68                    280         m                    35  
+##  8 1966-68                    134         m                    38  
+##  9 1966-68                    154         m                    39  
+## 10 1966-68                    258         m                    26  
+## # i 34 more rows
+## # i 3 more variables: shoulder_height_in_cm <dbl>, tusk_length_in_cm <dbl>,
+## #   tusk_circumference_in_cm <dbl>
+\end{verbatim}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature }\OtherTok{\textless{}{-}}\NormalTok{ elephant }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{filter}\NormalTok{((sex}\SpecialCharTok{==}\StringTok{"f"}\SpecialCharTok{\&}\NormalTok{estimated\_age\_years}\SpecialCharTok{\textgreater{}}\DecValTok{12}\NormalTok{)}\SpecialCharTok{|}\NormalTok{(sex}\SpecialCharTok{==}\StringTok{"m"}\SpecialCharTok{\&}\NormalTok{estimated\_age\_years}\SpecialCharTok{\textgreater{}}\DecValTok{25}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hfill\break
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mature }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{ggplot}\NormalTok{(}\AttributeTok{mapping=}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{years\_of\_sample\_collection,}\AttributeTok{y=}\NormalTok{tusk\_length\_in\_cm))}\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{mapping =}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color=}\NormalTok{years\_of\_sample\_collection))}\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title=}\StringTok{"Mature elephant Tusk length before(1966{-}68) and after(2005{-}13) the poaching"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 44 rows containing non-finite outside the scale range
+## (`stat_boxplot()`).
+\end{verbatim}
+
+\pandocbounded{\includegraphics[keepaspectratio]{hw7_files/figure-latex/unnamed-chunk-27-1.pdf}}
 
 \subsection{Submit the Homework}\label{submit-the-homework}
 
