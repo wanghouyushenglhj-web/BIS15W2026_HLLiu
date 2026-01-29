@@ -1,23 +1,14 @@
 ## Welcome!
 This is Hangjun Liu's page **Data Science for Biologists** at UC Davis.
 
-## Class Times and Contact Information
-everyday from 12 to 12
+## About myself
+I'm from China.My hometown is Xingjiang,I guess you never heared that place.But it's ok.
 
-## Course Summary  
-24hours everyday
+## What I like to do  
+Reading,Valorant,Riding motorcycle.
 
-## Reading  
-none
-
-## Setup Yourself  
-eat and sleep 
-
-## Labs  
-none
-
-## Homework  
-riding motorcycles and taking pictures
+## Something about me 
+I have a dog his name is Fuji.
 
 ## About me
 This person is lazy.
