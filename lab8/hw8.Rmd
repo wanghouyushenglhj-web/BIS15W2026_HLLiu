@@ -1,6 +1,6 @@
 ---
 title: "Homework 8"
-author: "Your Name Here"
+author: "Hangjun LIU"
 date: "`r Sys.Date()`"
 output:
   html_document: 
@@ -29,52 +29,91 @@ fisheries_clean <- read_csv("data/fisheries_clean.csv")
 
 1. Explore the data. What are the names of the variables, what are the dimensions, are there any NA's, what are the classes of the variables, etc.? You may use the functions that you prefer.
 ```{r}
-
+names(fisheries_clean)
+```
+```{r}
+anyNA(fisheries_clean)
+```
+```{r}
+str(fisheries_clean)
 ```
 
 2. Convert the following variables to factors: `period`, `continent`, `geo_region`, `country`, `scientific_name`, `common_name`, `taxonomic_code`, and `status`.
 ```{r}
+fisheries_clean <- fisheries_clean %>% 
+  mutate(across(where(is.character),as.factor)) %>% 
+  mutate(across(period,as.factor))
+```
 
+
+
+```{r}
+fisheries_clean
 ```
 
 3. Are there any missing values in the data? If so, which variables contain missing values and how many are missing for each variable?
 ```{r}
-
+summary(fisheries_clean)#no missing values.
 ```
 
 4. How many countries are represented in the data?
 ```{r}
-
+fisheries_clean %>% 
+  summarise(n_distinct(country))
 ```
 
 5. The variables `common_name` and `taxonomic_code` both refer to species. How many unique species are represented in the data based on each of these variables? Are the numbers the same or different?
 ```{r}
-
+fisheries_clean %>% 
+  summarise(n_unique_commonname=n_distinct(common_name),
+            n_unique_taxonomiccode=n_distinct(taxonomic_code))
 ```
 
 6. In 2023, what were the top five countries that had the highest overall catch?
 ```{r}
-
+fisheries_clean %>% 
+  filter(period=="2023") %>% 
+  group_by(country) %>% 
+  summarise(number_catch_country=sum(catch,na.rm=T)) %>% 
+  arrange(desc(number_catch_country))#top five is China,Indonesia,India,Russian Federation,United States of America.
 ```
 
 7. In 2023, what were the top 10 most caught species? To keep things simple, assume `common_name` is sufficient to identify species. What does `NEI` stand for in some of the common names? How might this be concerning from a fisheries management perspective?
 ```{r}
-
+fisheries_clean %>% 
+  filter(period=="2023") %>% 
+  group_by(common_name) %>% 
+  summarise(number_catch_commonname=sum(catch,na.rm=T)) %>% 
+  arrange(desc(number_catch_commonname))#top 10 show as below.
 ```
 
 8. For the species that was caught the most above (not NEI), which country had the highest catch in 2023?
 ```{r}
-
+fisheries_clean %>% 
+  filter(period=="2023",common_name=="Alaska pollock(=Walleye poll.)") %>% 
+  group_by(country) %>% 
+  summarise(number_catch_country=sum(catch,na.rm=T)) %>% 
+  arrange(desc(number_catch_country))#Russian Federation
 ```
 
 9. How has fishing of this species changed over the last decade (2013-2023)? Create a  plot showing total catch by year for this species.
 ```{r}
-
+fisheries_clean %>% 
+  filter(common_name=="Alaska pollock(=Walleye poll.)") %>% 
+  group_by(period) %>% 
+  summarise(number_catch_year=sum(catch,na.rm=T)) %>% 
+  ggplot(mapping = aes(x=period,y=number_catch_year))+
+  geom_point(mapping =aes(color=number_catch_year) )+
+  labs(title="Yearly Global Alaska pollock caught from 2013-2023")
 ```
 
 10. Perform one exploratory analysis of your choice. Make sure to clearly state the question you are asking before writing any code.
 ```{r}
-
+fisheries_clean %>% 
+  filter(period=="2018",country=="China") %>% 
+  ggplot(mapping = aes(x=common_name))+
+  geom_bar(mapping = aes(fill=common_name))+
+  labs(title = "number of each kind of fish caught in China in 2018")
 ```
 
 ## Knit and Upload
