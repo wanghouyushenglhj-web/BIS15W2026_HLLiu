@@ -12,7 +12,7 @@
 
 <meta name="date" content="2026-02-04" />
 
-<title>Lab 8.1</title>
+<title>Lab 9.2</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1502,7 +1502,7 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Lab 8.1</h1>
+<h1 class="title toc-ignore">Lab 9.2</h1>
 <h4 class="date">2026-02-04</h4>
 
 </div>
@@ -1511,265 +1511,204 @@ border-radius: 0px;
 <div id="learning-goals" class="section level2">
 <h2>Learning Goals</h2>
 <p><em>At the end of this exercise, you will be able to:</em><br />
-1. Use <code>group_by</code> to group data by categorical
-variables.<br />
-2. Use <code>summarize</code> to produce summary statistics for grouped
-data.</p>
+1. Explain the difference between tidy and messy data.<br />
+2. Evaluate a data set as tidy or untidy.<br />
+3. Use the <code>pivot_wider()</code> function of <code>tidyr</code> to
+transform data from long to wide format.</p>
 </div>
-<div id="load-the-libraries" class="section level2">
-<h2>Load the libraries</h2>
-<pre class="r"><code>library(&quot;tidyverse&quot;)
-library(&quot;janitor&quot;)</code></pre>
-</div>
-<div id="load-the-data" class="section level2">
-<h2>Load the data</h2>
-<p>For this lab, let’s go back to the elephants data from homework 7.
-The data are from: <a href="https://doi.org/10.1002/ece3.1769">Chiyo,
-Patrick I., Vincent Obanda, and David K. Korir. “Illegal tusk harvest
-and the decline of tusk size in the African elephant.” Ecology and
-Evolution 5, 22: 5216–5229 (2015)</a>. Data deposited at <a href="https://doi.org/10.5061/dryad.h6t7j">Dryad Digital
-Repository</a>.</p>
-<pre class="r"><code>elephants &lt;- read_csv(&quot;data/elephants.csv&quot;) %&gt;% 
-  clean_names() %&gt;% 
-  mutate(across(where(is.character), as.factor))</code></pre>
+<div id="resources" class="section level2">
+<h2>Resources</h2>
+<ul>
+<li><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">tidyr
+<code>pivot_wider()</code></a><br />
+</li>
+<li><a href="https://cran.r-project.org/web/packages/tidyr/vignettes/pivot.html">pivoting</a><br />
+</li>
+<li><a href="https://rladiessydney.org/courses/ryouwithme/02-cleanitup-5/">R
+Ladies Sydney</a></li>
+</ul>
 </div>
 <div id="review" class="section level2">
 <h2>Review</h2>
-<p><code>summarize()</code> is a verb in <code>dplyr</code> that allows
-us to produce summaries of data. It’s output is a new dataframe. In lab
-7, we learned how <code>summarize()</code> can be used to produce quick
-statistical summaries.</p>
-<ol style="list-style-type: decimal">
-<li>What is the average age, shoulder height, tusk length, and tusk
-circumference for all elephants in the data set?</li>
-</ol>
-<pre class="r"><code>elephants %&gt;% 
-  summarize(across
-            (where(is.numeric), 
-              ~mean(.x, na.rm=TRUE)))</code></pre>
-<pre><code>## # A tibble: 1 × 4
-##   estimated_age_years shoulder_height_in_cm tusk_length_in_cm
-##                 &lt;dbl&gt;                 &lt;dbl&gt;             &lt;dbl&gt;
-## 1                15.0                  210.              91.6
-## # ℹ 1 more variable: tusk_circumference_in_cm &lt;dbl&gt;</code></pre>
-<p>We can include multiple functions using this same structure, but it
-becomes cumbersome.</p>
-<pre class="r"><code>elephants %&gt;% 
-  summarize(
-    across(
-      where(is.numeric),
-      list(
-        mean   = ~mean(.x, na.rm = TRUE),
-        median = ~median(.x, na.rm = TRUE),
-        sd     = ~sd(.x, na.rm = TRUE),
-        min    = ~min(.x, na.rm = TRUE),
-        max    = ~max(.x, na.rm = TRUE),
-        n      = ~sum(!is.na(.x))
-      )
-    )
-  )</code></pre>
-<pre><code>## # A tibble: 1 × 24
-##   estimated_age_years_mean estimated_age_years_median estimated_age_years_sd
-##                      &lt;dbl&gt;                      &lt;dbl&gt;                  &lt;dbl&gt;
-## 1                     15.0                         12                   12.3
-## # ℹ 21 more variables: estimated_age_years_min &lt;dbl&gt;,
-## #   estimated_age_years_max &lt;dbl&gt;, estimated_age_years_n &lt;int&gt;,
-## #   shoulder_height_in_cm_mean &lt;dbl&gt;, shoulder_height_in_cm_median &lt;dbl&gt;,
-## #   shoulder_height_in_cm_sd &lt;dbl&gt;, shoulder_height_in_cm_min &lt;dbl&gt;,
-## #   shoulder_height_in_cm_max &lt;dbl&gt;, shoulder_height_in_cm_n &lt;int&gt;,
-## #   tusk_length_in_cm_mean &lt;dbl&gt;, tusk_length_in_cm_median &lt;dbl&gt;,
-## #   tusk_length_in_cm_sd &lt;dbl&gt;, tusk_length_in_cm_min &lt;dbl&gt;, …</code></pre>
+<p>Last time we learned the fundamentals of tidy data and used the
+<code>pivot_longer()</code> function to wrangle a few examples of
+frequently encountered untidy data. In the second part of today’s lab we
+will look at a few more examples of <code>pivot_longer()</code> but also
+use the <code>pivot_wider()</code> function to deal with another type of
+untidy data.</p>
 </div>
-<div id="group_by" class="section level2">
-<h2><code>group_by()</code></h2>
-<p>The <code>summarize()</code> function is often more useful when used
-with <code>group_by()</code>. <code>group_by()</code> allows us to group
-data by a categorical variable(s) of interest.</p>
-<pre class="r"><code>elephants %&gt;% 
-  group_by(sex)</code></pre>
-<pre><code>## # A tibble: 777 × 7
-## # Groups:   sex [2]
-##    years_of_sample_collection elephant_id sex   estimated_age_years
-##    &lt;fct&gt;                      &lt;fct&gt;       &lt;fct&gt;               &lt;dbl&gt;
-##  1 1966-68                    12          f                   0.08 
-##  2 1966-68                    34          f                   0.08 
-##  3 1966-68                    162         f                   0.083
-##  4 1966-68                    292         f                   0.083
-##  5 1966-68                    11          f                   0.25 
-##  6 1966-68                    152         f                   0.25 
-##  7 1966-68                    264         f                   0.25 
-##  8 1966-68                    263         f                   0.5  
-##  9 1966-68                    266         f                   0.5  
-## 10 1966-68                    217         f                   1    
-## # ℹ 767 more rows
-## # ℹ 3 more variables: shoulder_height_in_cm &lt;dbl&gt;, tusk_length_in_cm &lt;dbl&gt;,
-## #   tusk_circumference_in_cm &lt;dbl&gt;</code></pre>
-<p>Notice that the output doesn’t look different, but two groups are
-indicated. Any verbs that follow <code>group_by()</code> will be applied
-to each group separately. For example, what is the average age, shoulder
-height, tusk length, and tusk circumference for males and females?</p>
-<pre class="r"><code>elephants %&gt;% 
-  group_by(sex) %&gt;%
-  summarize(across
-            (where(is.numeric), 
-              ~mean(.x, na.rm=TRUE)))</code></pre>
-<pre><code>## # A tibble: 2 × 5
-##   sex   estimated_age_years shoulder_height_in_cm tusk_length_in_cm
-##   &lt;fct&gt;               &lt;dbl&gt;                 &lt;dbl&gt;             &lt;dbl&gt;
-## 1 f                    17.6                  211.              88.8
-## 2 m                    12.1                  209.              94.9
-## # ℹ 1 more variable: tusk_circumference_in_cm &lt;dbl&gt;</code></pre>
-<p>We can group by more than one variable.</p>
-<pre class="r"><code>elephants %&gt;% 
-  group_by(years_of_sample_collection, sex) %&gt;% 
-  summarize(mean_estimated_age_years=mean(estimated_age_years, na.rm=TRUE),
-            n=n(),
-            .groups= &#39;keep&#39;) %&gt;%
-  arrange(sex)</code></pre>
-<pre><code>## # A tibble: 4 × 4
-## # Groups:   years_of_sample_collection, sex [4]
-##   years_of_sample_collection sex   mean_estimated_age_years     n
-##   &lt;fct&gt;                      &lt;fct&gt;                    &lt;dbl&gt; &lt;int&gt;
-## 1 1966-68                    f                         17.6   323
-## 2 2005-13                    f                         17.9    93
-## 3 1966-68                    m                         10.8   282
-## 4 2005-13                    m                         16.7    79</code></pre>
-<p>Do you remember this question from homework 7?</p>
-<p>“What is the mean, median, and standard deviation for age of males
-and females included in the study? Separate the results by year of
-sample collection. Does the sampling look even between years and
-sexes?”</p>
-<p>Without <code>group_by()</code>, we had to produce multiple code
-chunks- we are now more efficient!</p>
-<pre class="r"><code>elephants %&gt;% 
-  filter(years_of_sample_collection==&quot;1966-68&quot;) %&gt;%
-  group_by(sex) %&gt;%
-  summarize(mean_age_m=mean(estimated_age_years, na.rm=TRUE),
-            median_age_m=median(estimated_age_years, na.rm=TRUE),
-            sd_age_m=sd(estimated_age_years, na.rm=TRUE),
-            n=n())</code></pre>
-<pre><code>## # A tibble: 2 × 5
-##   sex   mean_age_m median_age_m sd_age_m     n
-##   &lt;fct&gt;      &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-## 1 f           17.6           15    13.6    323
-## 2 m           10.8            8     9.19   282</code></pre>
-<pre class="r"><code>elephants %&gt;% 
-  filter(years_of_sample_collection==&quot;2005-13&quot;) %&gt;%
-  group_by(sex) %&gt;%
-  summarize(mean_age_m=mean(estimated_age_years, na.rm=TRUE),
-            median_age_m=median(estimated_age_years, na.rm=TRUE),
-            sd_age_m=sd(estimated_age_years, na.rm=TRUE),
-            n=n())</code></pre>
-<pre><code>## # A tibble: 2 × 5
-##   sex   mean_age_m median_age_m sd_age_m     n
-##   &lt;fct&gt;      &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-## 1 f           17.9         17.5     11.0    93
-## 2 m           16.7          9       13.9    79</code></pre>
-<pre class="r"><code>elephants %&gt;% 
-  group_by(sex, years_of_sample_collection) %&gt;%
-  summarize(mean_age_m=mean(estimated_age_years, na.rm=TRUE),
-            median_age_m=median(estimated_age_years, na.rm=TRUE),
-            sd_age_m=sd(estimated_age_years, na.rm=TRUE),
-            n=n(), .groups= &#39;keep&#39;)</code></pre>
-<pre><code>## # A tibble: 4 × 6
-## # Groups:   sex, years_of_sample_collection [4]
-##   sex   years_of_sample_collection mean_age_m median_age_m sd_age_m     n
-##   &lt;fct&gt; &lt;fct&gt;                           &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;
-## 1 f     1966-68                          17.6         15      13.6    323
-## 2 f     2005-13                          17.9         17.5    11.0     93
-## 3 m     1966-68                          10.8          8       9.19   282
-## 4 m     2005-13                          16.7          9      13.9     79</code></pre>
+<div id="load-the-tidyverse" class="section level2">
+<h2>Load the tidyverse</h2>
+<pre class="r"><code>library(&quot;tidyverse&quot;)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.6
+## ✔ forcats   1.0.1     ✔ stringr   1.6.0
+## ✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+## ✔ lubridate 1.9.4     ✔ tidyr     1.3.2
+## ✔ purrr     1.2.1     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div id="pivot_longer" class="section level2">
+<h2><code>pivot_longer()</code></h2>
+<p>Recall that we use <code>pivot_longer()</code> when our column names
+actually represent variables. A classic example would be that the column
+names represent observations of a variable.</p>
+<pre class="r"><code>datasets::USPersonalExpenditure</code></pre>
+<pre><code>##                       1940   1945  1950 1955  1960
+## Food and Tobacco    22.200 44.500 59.60 73.2 86.80
+## Household Operation 10.500 15.500 29.00 36.5 46.20
+## Medical and Health   3.530  5.760  9.71 14.0 21.10
+## Personal Care        1.040  1.980  2.45  3.4  5.40
+## Private Education    0.341  0.974  1.80  2.6  3.64</code></pre>
+<pre class="r"><code>?USPersonalExpenditure</code></pre>
+<p>Here we add a new column of expenditure types, which are stored as
+rownames above, with <code>mutate()</code>. The
+<code>USPersonalExpenditures</code> data also needs to be converted to a
+data frame before we can use the tidyverse functions, because it comes
+as a matrix.</p>
+<pre class="r"><code>expenditures &lt;- as_tibble(USPersonalExpenditure) %&gt;% 
+  mutate(expenditure = rownames(USPersonalExpenditure)) %&gt;% 
+  relocate(expenditure)
+expenditures</code></pre>
+<pre><code>## # A tibble: 5 × 6
+##   expenditure         `1940` `1945` `1950` `1955` `1960`
+##   &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Food and Tobacco    22.2   44.5    59.6    73.2  86.8 
+## 2 Household Operation 10.5   15.5    29      36.5  46.2 
+## 3 Medical and Health   3.53   5.76    9.71   14    21.1 
+## 4 Personal Care        1.04   1.98    2.45    3.4   5.4 
+## 5 Private Education    0.341  0.974   1.8     2.6   3.64</code></pre>
 </div>
 <div id="practice" class="section level2">
 <h2>Practice</h2>
-<p>Use the built-in <code>msleep</code> data to answer the following
-questions.</p>
 <ol style="list-style-type: decimal">
-<li>Calculate the min, max, mean, and total number of observations for
-body weight by vore.</li>
+<li><p>Are these data tidy? Please use <code>pivot_longer()</code> to
+tidy the data.</p></li>
+<li><p>Restrict the data to medical and health expenditures only. Sort
+in ascending order.</p></li>
 </ol>
-<pre class="r"><code>msleep %&gt;%
-  group_by(vore) %&gt;%
-  summarize(min_bodywt = min(bodywt),
-            max_bodywt = max(bodywt),
-            mean_bodywt = mean(bodywt),
-            total=n())</code></pre>
-<pre><code>## # A tibble: 5 × 5
-##   vore    min_bodywt max_bodywt mean_bodywt total
-##   &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;int&gt;
-## 1 carni        0.028      800        90.8      19
-## 2 herbi        0.022     6654       367.       32
-## 3 insecti      0.01        60        12.9       5
-## 4 omni         0.005       86.2      12.7      20
-## 5 &lt;NA&gt;         0.021        3.6       0.858     7</code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Calculate mean brain weight by taxonomic order in the msleep
-data.</li>
+</div>
+<div id="separate" class="section level2">
+<h2><code>separate()</code></h2>
+<p>In this new heart rate example, we have the sex of each patient
+included with their name. Are these data tidy? No, there is more than
+one value per cell in the patient column and the columns a, b, c, d once
+again represent values.</p>
+<pre class="r"><code>heartrate2 &lt;- read_csv(&quot;data/heartrate2.csv&quot;)</code></pre>
+<pre><code>## Rows: 6 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): patient
+## dbl (4): a, b, c, d
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>heartrate2</code></pre>
+<pre><code>## # A tibble: 6 × 5
+##   patient        a     b     c     d
+##   &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 Margaret_f    72    74    80    68
+## 2 Frank_m       84    84    88    76
+## 3 Hawkeye_m     64    66    68    64
+## 4 Trapper_m     60    58    64    58
+## 5 Radar_m       74    72    78    70
+## 6 Henry_m       88    87    88    72</code></pre>
+<p>We need to start by separating the patient names from their sexes.
+<code>separate()</code> needs to know which column you want to split,
+the names of the new columns, and what to look for in terms of breaks in
+the data.</p>
+<p>Another way of using separate is to specify the position of the
+split. In this case, we want to split the patient column at the last
+character.</p>
+<p>We would still need to deal with the “_” in the patient column. We
+can do this using the stringr package.</p>
+</div>
+<div id="practice-1" class="section level2">
+<h2>Practice</h2>
+<ol style="list-style-type: decimal">
+<li><p>Re-examine <code>heartrate2</code>. Use <code>separate()</code>
+for the sexes, <code>pivot_longer()</code> to tidy, and
+<code>arrange()</code> to organize by patient and drug. Store this as a
+new object <code>heartrate3</code>.</p></li>
+<li><p><code>unite()</code> is the opposite of separate(). Its syntax is
+straightforward. You only need to give a new column name and then list
+the columns to combine with a separation character. Give it a try below
+by recombining patient and sex from <code>heartrate3</code>.</p></li>
 </ol>
-<pre class="r"><code>msleep %&gt;% 
-  group_by(order) %&gt;% 
-  summarize(mean_brain_wt=mean(brainwt))</code></pre>
-<pre><code>## # A tibble: 19 × 2
-##    order           mean_brain_wt
-##    &lt;chr&gt;                   &lt;dbl&gt;
-##  1 Afrosoricida         0.0026  
-##  2 Artiodactyla        NA       
-##  3 Carnivora           NA       
-##  4 Cetacea             NA       
-##  5 Chiroptera           0.000275
-##  6 Cingulata            0.0459  
-##  7 Didelphimorphia     NA       
-##  8 Diprotodontia       NA       
-##  9 Erinaceomorpha       0.00295 
-## 10 Hyracoidea           0.0152  
-## 11 Lagomorpha           0.0121  
-## 12 Monotremata          0.025   
-## 13 Perissodactyla       0.414   
-## 14 Pilosa              NA       
-## 15 Primates            NA       
-## 16 Proboscidea          5.16    
-## 17 Rodentia            NA       
-## 18 Scandentia           0.0025  
-## 19 Soricomorpha         0.000592</code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>Try running the code again, but this time add
-<code>na.rm=TRUE</code>. What is the problem with Cetacea?</li>
+</div>
+<div id="pivot_wider" class="section level2">
+<h2><code>pivot_wider()</code></h2>
+<p>The opposite of <code>pivot_longer()</code>. You use
+<code>pivot_wider()</code> when you have an observation scattered across
+multiple rows. In the example below, <code>cases</code> and
+<code>population</code> represent variable names not observations.</p>
+<p>Rules:<br />
++ <code>pivot_wider</code>(names_from, values_from)<br />
++ <code>names_from</code> - Values in the <code>names_from</code> column
+will become new column names<br />
++ <code>values_from</code> - Cell values will be taken from the
+<code>values_from</code> column</p>
+<pre class="r"><code>tb_data &lt;- read_csv(&quot;data/tb_data.csv&quot;)</code></pre>
+<pre><code>## Rows: 12 Columns: 4
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (2): country, key
+## dbl (2): year, value
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>tb_data</code></pre>
+<pre><code>## # A tibble: 12 × 4
+##    country      year key             value
+##    &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;           &lt;dbl&gt;
+##  1 Afghanistan  1999 cases             745
+##  2 Afghanistan  1999 population   19987071
+##  3 Afghanistan  2000 cases            2666
+##  4 Afghanistan  2000 population   20595360
+##  5 Brazil       1999 cases           37737
+##  6 Brazil       1999 population  172006362
+##  7 Brazil       2000 cases           80488
+##  8 Brazil       2000 population  174504898
+##  9 China        1999 cases          212258
+## 10 China        1999 population 1272915272
+## 11 China        2000 cases          213766
+## 12 China        2000 population 1280428583</code></pre>
+<p>When using <code>pivot_wider()</code> we use <code>names_from</code>
+to identify the variables (new column names) and
+<code>values_from</code> to identify the values associated with the new
+columns.</p>
+</div>
+<div id="practice-2" class="section level2">
+<h2>Practice</h2>
+<ol style="list-style-type: decimal">
+<li>Load the <code>gene_exp.csv</code> data as a new object
+<code>gene_exp</code>. Are these data tidy? Use
+<code>pivot_wider()</code> to tidy the data.</li>
 </ol>
-<pre class="r"><code>msleep %&gt;% 
-  group_by(order) %&gt;% 
-  summarize(mean_brain_wt=mean(brainwt, na.rm=T))</code></pre>
-<pre><code>## # A tibble: 19 × 2
-##    order           mean_brain_wt
-##    &lt;chr&gt;                   &lt;dbl&gt;
-##  1 Afrosoricida         0.0026  
-##  2 Artiodactyla         0.198   
-##  3 Carnivora            0.0986  
-##  4 Cetacea            NaN       
-##  5 Chiroptera           0.000275
-##  6 Cingulata            0.0459  
-##  7 Didelphimorphia      0.0063  
-##  8 Diprotodontia        0.0114  
-##  9 Erinaceomorpha       0.00295 
-## 10 Hyracoidea           0.0152  
-## 11 Lagomorpha           0.0121  
-## 12 Monotremata          0.025   
-## 13 Perissodactyla       0.414   
-## 14 Pilosa             NaN       
-## 15 Primates             0.254   
-## 16 Proboscidea          5.16    
-## 17 Rodentia             0.00357 
-## 18 Scandentia           0.0025  
-## 19 Soricomorpha         0.000592</code></pre>
-<pre class="r"><code>msleep %&gt;% 
-  filter(order==&quot;Cetacea&quot;) %&gt;% 
-  select(order, genus, brainwt)</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   order   genus         brainwt
-##   &lt;chr&gt;   &lt;chr&gt;           &lt;dbl&gt;
-## 1 Cetacea Globicephalus      NA
-## 2 Cetacea Phocoena           NA
-## 3 Cetacea Tursiops           NA</code></pre>
-<p>–&gt;<a href="https://jmledford3115.github.io/datascibiol/">Home</a></p>
+</div>
+<div id="practice-3" class="section level2">
+<h2>Practice</h2>
+<p>For the last practice example, I will use data from the <a href="https://rladiessydney.org/courses/ryouwithme/02-cleanitup-5/">R
+Ladies Sydney</a> blog. This data is compiled by the NSW Office of
+Environment and contains the <em>Enterococci</em> counts in water
+samples obtained from Sydney beaches as part of the Beachwatch Water
+Quality Program.</p>
+<ol style="list-style-type: decimal">
+<li><p>Load the beachbugs data and have a look.</p></li>
+<li><p>Use <code>pivot_wider</code> to transform the data into wide
+format.</p></li>
+<li><p>Now, use <code>pivot_longer</code> to transform them back to
+long!</p></li>
+</ol>
+</div>
+<div id="wrap-up" class="section level2">
+<h2>Wrap-up</h2>
+<p>Please review the learning goals and be sure to use the code here as
+a reference when completing the homework.<br />
+–&gt;<a href="https://jmledford3115.github.io/datascibiol/">Home</a></p>
 </div>
 
 
