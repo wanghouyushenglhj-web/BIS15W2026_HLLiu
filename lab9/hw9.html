@@ -9,9 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Your Name Here" />
+<meta name="author" content="Hangjun Liu" />
 
-<meta name="date" content="2026-02-04" />
+<meta name="date" content="2026-02-10" />
 
 <title>Homework 9</title>
 
@@ -375,8 +375,8 @@ display: none;
 
 
 <h1 class="title toc-ignore">Homework 9</h1>
-<h4 class="author">Your Name Here</h4>
-<h4 class="date">2026-02-04</h4>
+<h4 class="author">Hangjun Liu</h4>
+<h4 class="date">2026-02-10</h4>
 
 </div>
 
@@ -410,30 +410,158 @@ the number of viable bacteria in a sample <a href="https://en.wikipedia.org/wiki
 <p>This homework loosely follows the tutorial of <a href="https://rladiessydney.org/">R Ladies Sydney</a>. If you get stuck,
 check it out!</p>
 <ol style="list-style-type: decimal">
-<li><p>Start by loading the data <code>sydneybeaches</code>. Do some
-exploratory analysis to get an idea of the data structure.</p></li>
-<li><p>Are these data “tidy” per the definitions of the tidyverse? How
-do you know? Are they in wide or long format?</p></li>
-<li><p>We are only interested in the variables site, date, and
-enterococci_cfu_100ml. Make a new object focused on these variables
-only. Name the object <code>sydneybeaches_long</code></p></li>
-<li><p>Pivot the data such that the dates are column names and each
-beach only appears once (wide format). Name the object
-<code>sydneybeaches_wide</code></p></li>
-<li><p>Pivot the data back so that the dates are data and not column
-names.</p></li>
-<li><p>We haven’t dealt much with dates yet, but separate the date into
-columns day, month, and year. Do this on the
-<code>sydneybeaches_long</code> data.</p></li>
-<li><p>What is the average <code>enterococci_cfu_100ml</code> by year
-for each beach. Think about which data you will use- long or
-wide.</p></li>
-<li><p>Make the output from question 7 easier to read by pivoting it to
-wide format.</p></li>
-<li><p>What was the most polluted beach in 2013?</p></li>
-<li><p>Explore the data! Do one analysis of your choice that includes a
-minimum of three lines of code.</p></li>
+<li>Start by loading the data <code>sydneybeaches</code>. Do some
+exploratory analysis to get an idea of the data structure.</li>
 </ol>
+<pre class="r"><code>sydneybeaches &lt;- read.csv(&quot;data/sydneybeaches.csv&quot;)
+sydneybeaches &lt;- 
+  clean_names(sydneybeaches)</code></pre>
+<pre class="r"><code>str(sydneybeaches)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3690 obs. of  8 variables:
+##  $ beach_id             : num  25 25 25 25 25 25 25 25 25 25 ...
+##  $ region               : chr  &quot;Sydney City Ocean Beaches&quot; &quot;Sydney City Ocean Beaches&quot; &quot;Sydney City Ocean Beaches&quot; &quot;Sydney City Ocean Beaches&quot; ...
+##  $ council              : chr  &quot;Randwick Council&quot; &quot;Randwick Council&quot; &quot;Randwick Council&quot; &quot;Randwick Council&quot; ...
+##  $ site                 : chr  &quot;Clovelly Beach&quot; &quot;Clovelly Beach&quot; &quot;Clovelly Beach&quot; &quot;Clovelly Beach&quot; ...
+##  $ longitude            : num  151 151 151 151 151 ...
+##  $ latitude             : num  -33.9 -33.9 -33.9 -33.9 -33.9 ...
+##  $ date                 : chr  &quot;02/01/2013&quot; &quot;06/01/2013&quot; &quot;12/01/2013&quot; &quot;18/01/2013&quot; ...
+##  $ enterococci_cfu_100ml: int  19 3 2 13 8 7 11 97 3 0 ...</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Are these data “tidy” per the definitions of the tidyverse? How do
+you know? Are they in wide or long format?</li>
+</ol>
+<pre class="r"><code>glimpse(sydneybeaches)</code></pre>
+<pre><code>## Rows: 3,690
+## Columns: 8
+## $ beach_id              &lt;dbl&gt; 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, …
+## $ region                &lt;chr&gt; &quot;Sydney City Ocean Beaches&quot;, &quot;Sydney City Ocean …
+## $ council               &lt;chr&gt; &quot;Randwick Council&quot;, &quot;Randwick Council&quot;, &quot;Randwic…
+## $ site                  &lt;chr&gt; &quot;Clovelly Beach&quot;, &quot;Clovelly Beach&quot;, &quot;Clovelly Be…
+## $ longitude             &lt;dbl&gt; 151.2675, 151.2675, 151.2675, 151.2675, 151.2675…
+## $ latitude              &lt;dbl&gt; -33.91449, -33.91449, -33.91449, -33.91449, -33.…
+## $ date                  &lt;chr&gt; &quot;02/01/2013&quot;, &quot;06/01/2013&quot;, &quot;12/01/2013&quot;, &quot;18/01…
+## $ enterococci_cfu_100ml &lt;int&gt; 19, 3, 2, 13, 8, 7, 11, 97, 3, 0, 6, 0, 1, 8, 3,…</code></pre>
+<pre class="r"><code>#Each variable has its own column?(yes)Each observation has its own row?(yes)Each value has its own cell? (Yes) 
+#They are in long format. </code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>We are only interested in the variables site, date, and
+enterococci_cfu_100ml. Make a new object focused on these variables
+only. Name the object <code>sydneybeaches_long</code></li>
+</ol>
+<pre class="r"><code>names(sydneybeaches)</code></pre>
+<pre><code>## [1] &quot;beach_id&quot;              &quot;region&quot;                &quot;council&quot;              
+## [4] &quot;site&quot;                  &quot;longitude&quot;             &quot;latitude&quot;             
+## [7] &quot;date&quot;                  &quot;enterococci_cfu_100ml&quot;</code></pre>
+<pre class="r"><code>sydneybeaches_long &lt;- sydneybeaches %&gt;% 
+  select(site,date,enterococci_cfu_100ml)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Pivot the data such that the dates are column names and each beach
+only appears once (wide format). Name the object
+<code>sydneybeaches_wide</code></li>
+</ol>
+<pre class="r"><code>sydneybeaches_wide &lt;- 
+  sydneybeaches_long %&gt;% 
+  pivot_wider(names_from=date,values_from = enterococci_cfu_100ml)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Pivot the data back so that the dates are data and not column
+names.</li>
+</ol>
+<p>#in the long form data,the dates are already daya not the column
+names.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>We haven’t dealt much with dates yet, but separate the date into
+columns day, month, and year. Do this on the
+<code>sydneybeaches_long</code> data.</li>
+</ol>
+<pre class="r"><code>sydneybeaches_long &lt;- sydneybeaches_long %&gt;% 
+  separate(col = date,into = c(&quot;day&quot;,&quot;month&quot;,&quot;year&quot;),sep=&quot;/&quot;)</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>What is the average <code>enterococci_cfu_100ml</code> by year for
+each beach. Think about which data you will use- long or wide.</li>
+</ol>
+<pre class="r"><code>names(sydneybeaches_long)</code></pre>
+<pre><code>## [1] &quot;site&quot;                  &quot;day&quot;                   &quot;month&quot;                
+## [4] &quot;year&quot;                  &quot;enterococci_cfu_100ml&quot;</code></pre>
+<pre class="r"><code>sydneybeaches_long &lt;- 
+  sydneybeaches_long %&gt;% 
+  group_by(year,site) %&gt;% 
+  summarize(mean_enterococci_cfu_100ml=mean(enterococci_cfu_100ml,na.rm=T))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>structure(sydneybeaches_long)</code></pre>
+<pre><code>## # A tibble: 66 × 3
+## # Groups:   year [6]
+##    year  site                    mean_enterococci_cfu_100ml
+##    &lt;chr&gt; &lt;chr&gt;                                        &lt;dbl&gt;
+##  1 2013  Bondi Beach                                  32.2 
+##  2 2013  Bronte Beach                                 26.8 
+##  3 2013  Clovelly Beach                                9.28
+##  4 2013  Coogee Beach                                 39.7 
+##  5 2013  Gordons Bay (East)                           24.8 
+##  6 2013  Little Bay Beach                            122.  
+##  7 2013  Malabar Beach                               101.  
+##  8 2013  Maroubra Beach                               47.1 
+##  9 2013  South Maroubra Beach                         39.3 
+## 10 2013  South Maroubra Rockpool                      96.4 
+## # ℹ 56 more rows</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Make the output from question 7 easier to read by pivoting it to
+wide format.</li>
+</ol>
+<pre class="r"><code>sydneybeaches_long_mean &lt;- 
+  sydneybeaches_long %&gt;% 
+  group_by(year,site) %&gt;% 
+  pivot_wider(names_from = year,
+              values_from = mean_enterococci_cfu_100ml)</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>What was the most polluted beach in 2013?</li>
+</ol>
+<pre class="r"><code>names(sydneybeaches_long_mean)</code></pre>
+<pre><code>## [1] &quot;site&quot; &quot;2013&quot; &quot;2014&quot; &quot;2015&quot; &quot;2016&quot; &quot;2017&quot; &quot;2018&quot;</code></pre>
+<pre class="r"><code>sydneybeaches_long_mean %&gt;% 
+  select(&quot;2013&quot;,site) %&gt;% 
+  arrange(&quot;2013&quot;)#Little Bay Beach was the most polluted in 2013.</code></pre>
+<pre><code>## # A tibble: 11 × 2
+## # Groups:   site [11]
+##    `2013` site                   
+##     &lt;dbl&gt; &lt;chr&gt;                  
+##  1  32.2  Bondi Beach            
+##  2  26.8  Bronte Beach           
+##  3   9.28 Clovelly Beach         
+##  4  39.7  Coogee Beach           
+##  5  24.8  Gordons Bay (East)     
+##  6 122.   Little Bay Beach       
+##  7 101.   Malabar Beach          
+##  8  47.1  Maroubra Beach         
+##  9  39.3  South Maroubra Beach   
+## 10  96.4  South Maroubra Rockpool
+## 11  29.7  Tamarama Beach</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li>Explore the data! Do one analysis of your choice that includes a
+minimum of three lines of code.<br />
+what is the most clean beach in 2018？</li>
+</ol>
+<pre class="r"><code>cleanest_beaches2018 &lt;- 
+  sydneybeaches_long_mean %&gt;% 
+  select(&quot;2018&quot;,site)</code></pre>
+<pre class="r"><code>cleanest_beaches2018 %&gt;% 
+  arrange(&quot;2018&quot;)</code></pre>
+<pre><code>## # A tibble: 11 × 2
+## # Groups:   site [11]
+##    `2018` site                   
+##     &lt;dbl&gt; &lt;chr&gt;                  
+##  1  22.9  Bondi Beach            
+##  2  43.4  Bronte Beach           
+##  3  10.6  Clovelly Beach         
+##  4  21.6  Coogee Beach           
+##  5  17.6  Gordons Bay (East)     
+##  6  59.1  Little Bay Beach       
+##  7  38.0  Malabar Beach          
+##  8   9.21 Maroubra Beach         
+##  9  12.5  South Maroubra Beach   
+## 10 112.   South Maroubra Rockpool
+## 11  15.5  Tamarama Beach</code></pre>
+<p>#Maroubra Beach is the cleanest beach in 2018</p>
 </div>
 <div id="knit-and-upload" class="section level2">
 <h2>Knit and Upload</h2>
