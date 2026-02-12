@@ -37,9 +37,9 @@ sharks <-
 ```{r}
 sharks %>% 
   group_by(county) %>% 
-  count(incident_num) %>% 
-  arrange(desc(incident_num)) %>% 
-  head(n=5)
+  summarise(total_incidents_county=n()) %>% 
+  arrange(desc(total_incidents_county)) %>% 
+  head(5)
 ```
 
 
@@ -49,54 +49,124 @@ sharks %>%
 
 2.  Make a plot that shows the total number of incidents per county.
 ```{r}
-sharks %>% 
-  ggplot(aes(x=county,y=incident_num))+
-  geom_bar()
+names(sharks)
 ```
+
+```{r}
+sharks %>% 
+  group_by(county) %>% 
+  summarise(incidents_county=n()) %>% 
+  arrange(desc(incidents_county)) %>% 
+  ggplot(aes(x=reorder(county,incidents_county),y=incidents_county))+
+  geom_col(fill="green")+
+  coord_flip()+
+  labs(title = "Total number of incidents per county")
+```
+
 
 3. Are there months of the year when incidents are more likely to occur? Make a plot that shows the total number of incidents by month. Which month has the highest number of incidents?  
 ```{r}
-
+names(sharks)
 ```
 
 ```{r}
-
+sharks %>% 
+  group_by(month) %>% 
+  summarise(incidents_number_month=n()) %>% 
+  ggplot(aes(x=month,y=incidents_number_month))+
+  geom_col(fill="blue")+
+  coord_flip()+
+  labs(title = "Incidents by month")#October is the month with most incidents occured.
 ```
 
 4. Is there a time of day when most attacks occur? Make a plot that shows the total number of incidents by time of day. Which time of day has the highest number of incidents?  
 ```{r}
-
+names(sharks)
 ```
+```{r}
+sharks %>% 
+  group_by(time) %>% 
+  summarise(incident_num_time=n()) %>% 
+  ggplot(aes(x=time,y=incident_num_time))+
+  geom_col(fill="purple")+
+  coord_flip()+
+  labs(title = "Incidents by time")#Between 10pm and early am is the most incidents occured,which is na on the graph.
+```
+
+
 
 5. How do the number and types of injuries compare by county? Make a table that shows the number of injury types by county. Which county has the highest number incidents? (hint: your table should be in wide format)
 ```{r}
-
+names(sharks)
 ```
+
+```{r}
+sharks %>% 
+  group_by(county,injury) %>% 
+  summarise(count=n()) %>% 
+  pivot_wider(names_from = injury,values_from = count) %>% 
+  mutate(total_incidents = rowSums(across(where(is.numeric)),na.rm=T)) %>% 
+  arrange(desc(total_incidents))#san diego has the most incidents
+```
+
 
 6. Use the table from #5 to make a plot that shows the total number of incidents by county.
 ```{r}
-
+sharks %>% 
+  group_by(county,injury) %>% 
+  summarise(count=n()) %>% 
+  pivot_wider(names_from = injury,values_from = count) %>% 
+  mutate(total_incidents = rowSums(across(where(is.numeric)),na.rm=T)) %>% 
+  arrange(desc(total_incidents)) %>% 
+  ggplot(aes(x=county,y=total_incidents))+
+  geom_col(fill="blue")+
+  coord_flip()+
+  labs(title = "Total incidents by counties")
 ```
 
 7. In the data, `mode` refers to a type of activity. Which activity is associated with the highest number of incidents?
 ```{r}
-
+names(sharks)
 ```
+```{r}
+sharks %>% 
+  group_by(mode) %>% 
+  summarise(total_incidents_mode=n()) %>% 
+  arrange(desc(total_incidents_mode))#surfing/boarding is the activity that associated with the highest number of incidents.
+```
+
 
 8. Make a plot that compares the number of incidents by activity.
 ```{r}
-
+sharks %>% 
+  group_by(mode) %>% 
+  summarise(total_incidents_mode=n()) %>% 
+  arrange(desc(total_incidents_mode)) %>% 
+  ggplot(aes(x=mode,y=total_incidents_mode))+
+  geom_col(fill="darkblue")+
+  coord_flip()+
+  labs(title = "Nmuber of incidents by activities")
 ```
 
 9. Which shark species is involved in the highest number of incidents?  
 ```{r}
-
+sharks %>% 
+  group_by(species) %>% 
+  summarise(total_incidents_species=n()) %>% 
+  arrange(desc(total_incidents_species))#white shark involved in the highest number of incidents.
 ```
 
 10. Are all incidents involving Great White's fatal? Make a plot that shows the number and types of incidents for Great White's only.  
 ```{r}
-
+sharks %>% 
+  filter(species=="White") %>% 
+  group_by(injury) %>% 
+  summarise(total_incidents_white=n()) %>% 
+  ggplot(aes(x=injury,y=total_incidents_white))+
+  geom_col(fill="darkblue")+
+  labs(title = "Number of each types of incidents for Great White")
 ```
 
 ## Knit and Upload
 Please knit your work as an .html file and upload to Canvas. Homework is due before the start of the next lab. No late work is accepted. Make sure to use the formatting conventions of RMarkdown to make your report neat and clean! 
+
