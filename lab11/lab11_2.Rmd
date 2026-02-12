@@ -229,12 +229,19 @@ homerange %>%
 ## Practice
 1. Use facet_wrap to compare the distribution of `log10_mass` by `thermoregulation`.
 ```{r}
-
+homerange %>% 
+  ggplot(aes(x=log10_mass))+
+  geom_density(fill="blue",alpha=0.3)+
+  facet_wrap(~thermoregulation,ncol=2)
 ```
+  
 
 2. Use facet_grid to compare the distribution of `log10_hra` by `locomotion` and `thermoregulation`.
 ```{r}
-
+homerange %>% 
+  ggplot(aes(x=log10_mass))+
+  geom_density(fill="blue",alpha=0.3)+
+  facet_grid(thermoregulation~locomotion)
 ```
 
 ## Wrap-up  
